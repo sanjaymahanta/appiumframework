@@ -13,13 +13,23 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                bat 'mvn clean test'
+
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'browserstack-credentials',
+                        usernameVariable: 'BROWSERSTACK_USERNAME',
+                        passwordVariable: 'BROWSERSTACK_ACCESS_KEY'
+                    )
+                ]) {
+
+                    bat 'mvn clean test'
+
+                }
             }
         }
     }
 
     post {
-
         always {
             echo 'Test execution completed'
         }

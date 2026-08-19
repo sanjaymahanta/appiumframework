@@ -25,12 +25,54 @@ public class ConfigReader {
 
         } catch (IOException e) {
 
-            e.printStackTrace();
+            System.out.println("config.properties not found.");
+            System.out.println("Using Jenkins environment variables.");
         }
     }
 
     public static String getProperty(String key) {
 
-        return properties.getProperty(key);
+        String value = null;
+
+        if (properties != null) {
+            value = properties.getProperty(key);
+        }
+
+        if (value == null || value.isBlank()) {
+
+            if (key.equals("browserstack.username")) {
+                value = System.getenv("BROWSERSTACK_USERNAME");
+            }
+
+            else if (key.equals("browserstack.accesskey")) {
+                value = System.getenv("BROWSERSTACK_ACCESS_KEY");
+            }
+
+            else if (key.equals("platform")) {
+                value = System.getenv("PLATFORM");
+            }
+
+            else if (key.equals("app")) {
+                value = System.getenv("BROWSERSTACK_APP");
+            }
+
+            else if (key.equals("deviceName")) {
+                value = System.getenv("DEVICE_NAME");
+            }
+
+            else if (key.equals("platformVersion")) {
+                value = System.getenv("PLATFORM_VERSION");
+            }
+
+            else if (key.equals("projectName")) {
+                value = System.getenv("PROJECT_NAME");
+            }
+
+            else if (key.equals("buildName")) {
+                value = System.getenv("BUILD_NAME");
+            }
+        }
+
+        return value;
     }
 }
