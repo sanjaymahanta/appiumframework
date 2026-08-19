@@ -13,63 +13,51 @@ public class ConfigReader {
         properties = new Properties();
 
         try {
-
             FileInputStream file =
-                    new FileInputStream(
-                            "src/test/resources/config.properties"
-                    );
+                    new FileInputStream("src/test/resources/config.properties");
 
             properties.load(file);
-
             file.close();
 
         } catch (IOException e) {
-
-            System.out.println("config.properties not found.");
-            System.out.println("Using Jenkins environment variables.");
+            System.out.println("config.properties not found. Using Jenkins environment variables.");
         }
     }
 
     public static String getProperty(String key) {
 
-        String value = null;
+        String value = properties.getProperty(key);
 
-        if (properties != null) {
-            value = properties.getProperty(key);
-        }
+        if (value == null || value.isEmpty()) {
 
-        if (value == null || value.isBlank()) {
+            switch (key) {
 
-            if (key.equals("browserstack.username")) {
-                value = System.getenv("BROWSERSTACK_USERNAME");
-            }
+                case "browserstack.username":
+                    return System.getenv("BROWSERSTACK_USERNAME");
 
-            else if (key.equals("browserstack.accesskey")) {
-                value = System.getenv("BROWSERSTACK_ACCESS_KEY");
-            }
+                case "browserstack.accesskey":
+                    return System.getenv("BROWSERSTACK_ACCESS_KEY");
 
-            else if (key.equals("platform")) {
-                value = System.getenv("PLATFORM");
-            }
+                case "platform":
+                    return System.getenv("PLATFORM");
 
-            else if (key.equals("app")) {
-                value = System.getenv("BROWSERSTACK_APP");
-            }
+                case "app":
+                    return System.getenv("APP");
 
-            else if (key.equals("deviceName")) {
-                value = System.getenv("DEVICE_NAME");
-            }
+                case "deviceName":
+                    return System.getenv("DEVICE_NAME");
 
-            else if (key.equals("platformVersion")) {
-                value = System.getenv("PLATFORM_VERSION");
-            }
+                case "platformVersion":
+                    return System.getenv("PLATFORM_VERSION");
 
-            else if (key.equals("projectName")) {
-                value = System.getenv("PROJECT_NAME");
-            }
+                case "projectName":
+                    return System.getenv("PROJECT_NAME");
 
-            else if (key.equals("buildName")) {
-                value = System.getenv("BUILD_NAME");
+                case "buildName":
+                    return System.getenv("BUILD_NAME");
+
+                default:
+                    return null;
             }
         }
 
