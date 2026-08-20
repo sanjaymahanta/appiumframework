@@ -2,6 +2,21 @@ pipeline {
 
     agent any
 
+    environment {
+
+        PLATFORM = 'ios'
+
+        APP = 'bs://de5e892d3b0328be80a291eef9c294d50c120854'
+
+        DEVICE_NAME = 'iPhone 15 Pro'
+
+        PLATFORM_VERSION = '17.0'
+
+        PROJECT_NAME = 'Appium Common Framework'
+
+        BUILD_NAME = 'Appium Build 1'
+    }
+
     stages {
 
         stage('Checkout') {
@@ -10,9 +25,7 @@ pipeline {
 
                 git branch: 'main',
                     url: 'https://github.com/sanjaymahanta/appiumcommonframework.git'
-
             }
-
         }
 
         stage('Build & Test') {
@@ -28,13 +41,9 @@ pipeline {
                 ]) {
 
                     bat 'mvn clean test'
-
                 }
-
             }
-
         }
-
     }
 
     post {
@@ -50,7 +59,5 @@ pipeline {
         failure {
             echo 'Tests FAILED'
         }
-
     }
-
 }
