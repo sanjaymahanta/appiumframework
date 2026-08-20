@@ -5,13 +5,18 @@ pipeline {
     stages {
 
         stage('Checkout') {
+
             steps {
+
                 git branch: 'main',
-                    url: 'https://github.com/sanjaymahanta/appiumframework.git'
+                    url: 'https://github.com/sanjaymahanta/appiumcommonframework.git'
+
             }
+
         }
 
         stage('Build & Test') {
+
             steps {
 
                 withCredentials([
@@ -25,11 +30,15 @@ pipeline {
                     bat 'mvn clean test'
 
                 }
+
             }
+
         }
+
     }
 
     post {
+
         always {
             echo 'Test execution completed'
         }
@@ -41,5 +50,7 @@ pipeline {
         failure {
             echo 'Tests FAILED'
         }
+
     }
+
 }
